@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from django.template.loader import get_template
 from django import VERSION as DJANGO_VERSION
 
@@ -62,6 +63,7 @@ def as_bootstrap_inline(form):
 def as_bootstrap_horizontal(form, label_classes=""):
     template = get_template("bootstrap/form.html")
     form = _preprocess_fields(form)
+    grid_columns = getattr(settings, "BOOTSTRAP_COLUMNS_GRID", 12)
 
     if label_classes == "":
         label_classes = "col-md-2"
@@ -71,19 +73,18 @@ def as_bootstrap_horizontal(form, label_classes=""):
         "single_container": "",
         "wrap": "",
     }
-
     for label_class in label_classes.split(" "):
         split_class, column_count = label_class.rsplit("-", 1)
         column_count = int(column_count)
 
-        if column_count < 12:
+        if column_count <= grid_columns:
             offset_class = "{split_class}-offset-{column_count}".format(
                 split_class=split_class,
                 column_count=column_count,
             )
             wrap_class = "{split_class}-{column_count}".format(
                 split_class=split_class,
-                column_count=12 - column_count,
+                column_count=grid_columns - column_count,
             )
             css_classes["single_container"] += offset_class + " " + wrap_class + " "
             css_classes["wrap"] += wrap_class + " "

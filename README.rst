@@ -57,6 +57,9 @@ and include your form using something like the following markup: ::
         </div>
     </form>
 
+You can also specify the number of columns in your bootstrap grid using the
+Django settings `BOOTSTRAP_COLUMNS_GRID`
+
 
 Specifying Form Layouts
 -----------------------
